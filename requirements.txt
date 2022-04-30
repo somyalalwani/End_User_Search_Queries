@@ -1,0 +1,3 @@
+Flask==2.0.2
+pyjsonq==1.0.2
+pymongo==4.0.2
