@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Quierra</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/display.css') }}">
+
+<link rel="javascript" href="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+.myLink {display: none}
+</style>
+</head>
+<body onload = "start()" class="w3-light-grey">
+
+<!-- Navigation Bar -->
+<div class="w3-bar w3-white w3-border-bottom w3-xlarge">
+  <a href="#" class="w3-bar-item w3-button w3-text-green w3-hover-green"><b>Quierra</b></a>
+  <a href="#" style="font-size: 20px;" class="w3-bar-item w3-button w3-right w3-hover-green w3-text-grey">Documentation</a>
+</div>
+
+<!-- Header -->
+<header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
+  <img class="w3-image" src="{{ url_for('static',filename='assets/bg3.jpg') }}" alt="London" width="1500" height="700">
+  <div class="w3-display-middle" style="width:65%">
+    <div class="w3-bar w3-black">
+      <!-- <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Car');"><i class="fa fa-car w3-margin-right"></i>About</button> -->
+      <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Flight');"><i class="fa fa-filter w3-margin-right"></i>Simple Query</button>
+      <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Hotel');"><i class="fa fa-terminal w3-margin-right"></i>Complex Query</button>
+    </div>
+
+    <!-- Tabs -->
+    <div id="Flight" class="w3-container w3-white w3-padding-16 myLink" style="text-align: center;">
+
+      <h3>Go Queirring with us..</h3>
+
+      <br>
+      <form action="http://localhost:5000/simple_query" method = "post" enctype="multipart/form-data"> 
+        {% with messages = get_flashed_messages(category_filter=["simple_query"]) %}
+         {% if messages %}
+            {%- for msg in messages %}
+
+            <div class="center">
+              <p style="color: green;">{{ msg }}</p>
+            </div>
+            
+            {% endfor -%}
+         {% endif %}
+         {% endwith %}
+      <div style="align-items: center;">
+        
+        <input type="file" id="actual-btn" name = "choose_btn" onchange="previewFile(this);" hidden/>
+        <label class="w3-green" for="actual-btn">Choose File</label>
+        <span id="file-chosen">No file chosen</span>
+        <button class="dropbtn" style="margin-right: 10px; margin-left: 5px;" name="action" value = "go">Go</button>
+
+      </div>
+
+      <br>
+
+      <div class="wrap">
+        <span class="decor"></span>
+        <nav>
+          <ul class="primary">
+            <li>
+              <a id = "tbl" class="bar" onclick="makeitvisible1()">Table</a>
+              <ul id="vis1" class="sub" style="overflow-y: scroll; height: 250px;">
+              </ul>
+            </li>
+            <li>
+            <a id = "colm" class="bar" onclick="makeitvisible2()">Column</a>
+              <ul id="vis2" class="sub" style="overflow-y: scroll; height: 250px;">
+              </ul>
+            </li>
+            <li>
+            <a id = "oprt" class="bar" onclick="makeitvisible3()">Operator</a>
+              <ul id="vis3" class="sub" style="overflow-y: scroll; height: 250px;">
+                <li onclick="saveOpr(this)" value=">" >Greater then</li>
+                <li onclick="saveOpr(this)" value="<" >Less then</li>
+                <li onclick="saveOpr(this)" value=">=" >Greater then or Equals to</li>
+                <li onclick="saveOpr(this)" value="<=" >Less then or Equals to</li>
+                <li onclick="saveOpr(this)" value="==" >Equals to</li>
+                <li onclick="saveOpr(this)" value="!=" >Not Equals to</li>
+              </ul>  
+            </li>
+
+            <li>
+                <input style="width: 80%; margin-top: 12%; margin-left: 10%; margin-right: 10%;" type="text" id="value" name="value"><br><br>
+            </li>
+
+            <li>
+              <button class="button" style="vertical-align:middle" name="action" value="run_query1"><span>Run Query</span></button>
+            </li>
+
+
+
+          </ul>
+        </nav>
+        </div>
+
+      <br>
+      <br>
+
+        </form>
+    </div>
+
+<!------------------------------------------------------------------------------------------------------------>
+
+    <div id="Hotel" class="w3-container w3-white w3-padding-8 myLink">
+
+      <form action="http://localhost:5000/complex_query" method = "post" enctype="multipart/form-data">
+      <div class="clearfix">
+        <br>
+        {% with messages = get_flashed_messages(category_filter=["complex_query"]) %}
+         {% if messages %}
+            {%- for msg in messages %}
+
+            <div class="center">
+              <p style="color: green;">{{ msg }}</p>
+            </div>
+            
+            {% endfor -%}
+         {% endif %}
+         {% endwith %}
+        <div class="box">
+          
+            <textarea id="field" name = "field" placeholder="What's your query?" maxlength="3000" rows="12" cols="55" style="margin-top:15px; margin-bottom:15px; padding:10px;  border-radius: 8px; resize:none; color: white; background-color: #212529;"></textarea>
+            <div class="message"></div>
+          
+        </div>
+        
+        <div class="box">
+
+          <div style="margin-left: 50px;">
+
+          <div>
+              <br>
+              <br>
+
+              <div style="vertical-align:middle; margin-left:20px;" id="something">
+                
+              
+                <input type="file" id="actual-btn1" name = "choose2" hidden/>
+                <label class="w3-green" for="actual-btn1">Choose File</label>
+                <span id="file-chosen2">No file chosen</span>
+                <!--a onclick="upload_file()" class="dropbtn" style="margin-right: 10px; margin-left: 5px;" name="action1" value = "go">Go</a-->
+                <button onclick="click2()" class="dropbtn" style="margin-right: 10px; margin-left: 5px;" name="action1" value = "go">Go</button>
+                {% if scroll %}
+                <script>
+                  document.getElementById('{{ scroll }}').scrollIntoView();
+                  // or
+                  //document.location.hash = '#' + '{{ scroll }}';
+              </script>
+              {% endif %}
+              </div>
+
+
+          </div>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <div>
+
+            <button class="button" style="vertical-align:middle" name="action1" value="run_query2"><span>Run Query</span></button>
+
+          </div>
+
+        </div>
+     
+        </div>
+      </div>
+
+    </form>
+    </div>
+
+<!------------------------------------------------------------------------------------------------------------>
+
+
+</header>
+
+
+<script>
+function openLink(evt, linkName) {
+  var i, x, tablinks;
+  x = document.getElementsByClassName("myLink");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < x.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" w3-green", "");
+  }
+  document.getElementById(linkName).style.display = "block";
+  evt.currentTarget.className += " w3-green";
+}
+
+// Click on the first tablink on load
+
+function start(){
+  // document.getElementsByClassName("tablink")[0].click();
+  var f = '{{flag[0]}}';
+  // alert(f);
+  if(f==2){
+    document.getElementsByClassName("tablink")[1].click();
+  }
+  else{
+    document.getElementsByClassName("tablink")[0].click();
+  }
+}
+
+/*****************************************************************************/
+
+
+const actualBtn = document.getElementById('actual-btn');
+const fileChosen = document.getElementById('file-chosen');
+actualBtn.addEventListener('change', function(){
+  fileChosen.textContent = this.files[0].name
+})
+
+const actualBtn1 = document.getElementById('actual-btn1');
+const fileChosen2 = document.getElementById('file-chosen2');
+actualBtn1.addEventListener('change', function(){
+  fileChosen2.textContent = this.files[0].name
+})
+
+/*****************************************************************************/
+
+function makeitvisible1(){
+
+  $.ajax({
+    type: "POST",
+    url: "/get_tablename",
+    data: "",
+    contentType: "application/json",
+    dataType: 'json',
+    success: function(tabels) {
+
+      for(var key in tabels) {
+
+        var val = tabels[key]
+        var html = "";
+
+        html += "<li ";
+        html += "value = '" + val + "' "
+        html += "onclick = 'saveTableName(this)' >"
+        html += val
+        html += "</li>";
+            
+        $(document.getElementById("vis1")).append(html);
+      }
+   } 
+  });
+
+  document.getElementById("vis1").style.display = "block";
+  document.getElementById("vis1").style.background = "#fff";
+}
+
+
+function makeitvisible2(){
+
+$.ajax({
+  type: "POST",
+  url: "/get_colname",
+  data: "",
+  contentType: "application/json",
+  dataType: 'json',
+  success: function(cols) {
+
+    for(var key in cols) {
+
+      var val = cols[key]
+      var html = "";
+
+      html += "<li ";
+      html += "value = '" + val + "' "
+      html += "onclick = 'saveColName(this)' >"
+      html += val
+      html += "</li>";
+          
+      $(document.getElementById("vis2")).append(html);
+    }
+ } 
+});
+
+
+document.getElementById("vis2").style.display = "block";
+document.getElementById("vis2").style.background = "#fff";
+}
+
+function makeitvisible3(){
+  document.getElementById("vis3").style.display = "block";
+  document.getElementById("vis3").style.background = "#fff";
+}
+
+/*****************************************************************************/
+
+
+function saveTableName(x){
+  att = x.getAttribute('value')
+  var server_data = [{"table": att}];
+
+  $.ajax({
+  type: "POST",
+  url: "/send_tablename",
+  data: JSON.stringify(server_data),
+  contentType: "application/json",
+  dataType: 'json',
+  success: function(temp) {
+  } 
+  });
+
+  document.getElementById("tbl").innerHTML = att
+  document.getElementById("vis1").style.display = "none";
+}
+
+
+function saveColName(x){
+  att = x.getAttribute('value')
+  var server_data = [{"col": att}];
+  $.ajax({
+  type: "POST",
+  url: "/send_colname",
+  data: JSON.stringify(server_data),
+  contentType: "application/json",
+  dataType: 'json',
+  success: function(temp) {
+  } 
+  });
+
+  document.getElementById("colm").innerHTML = att
+  document.getElementById("vis2").style.display = "none";
+}
+
+
+function saveOpr(x){
+  att = x.getAttribute('value')
+  var server_data = [{"op": att}];
+
+  $.ajax({
+  type: "POST",
+  url: "/send_op",
+  data: JSON.stringify(server_data),
+  contentType: "application/json",
+  dataType: 'json',
+  success: function(temp) {
+  } 
+  });
+
+  document.getElementById("oprt").innerHTML = att
+  document.getElementById("vis3").style.display = "none";
+}
+
+
+/*****************************************************************************/
+
+function upload_file(){
+  // att = x.getAttribute('value')
+  // var server_data = [{"op": att}];
+
+  $.ajax({
+  type: "POST",
+  url: "/upload_file",
+  data: "",
+  contentType: "application/json",
+  dataType: 'json',
+  success: function(temp) {
+  } 
+  });
+
+  // document.getElementById("oprt").innerHTML = att
+  // document.getElementById("vis3").style.display = "none";
+}
+
+</script>
+
+</body>
+</html>

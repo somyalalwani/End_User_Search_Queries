@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Quierra</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/display.css') }}">
+
+<link rel="javascript" href="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="js/FileSaver.js"></script>
+
+
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+.myLink {display: none}
+</style>
+</head>
+<body class="w3-light-grey">
+
+<!-- Navigation Bar -->
+<div class="w3-bar w3-white w3-border-bottom w3-xlarge">
+  <a href="#" class="w3-bar-item w3-button w3-text-green w3-hover-green"><b>Quierra</b></a>
+  <a href="#" style="font-size: 20px;" class="w3-bar-item w3-button w3-right w3-hover-green w3-text-grey">Documentation</a>
+</div>
+
+<!-- Header -->
+<header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
+  <img class="w3-image" src="{{ url_for('static',filename='assets/bg3.jpg') }}" alt="London" width="1500" height="700">
+  <div class="w3-display-middle" style="width:65%">
+    <div class="w3-bar w3-black">
+      <a class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Flight');">Search Results</a>
+    </div>
+
+    <div id="Flight" class="w3-container w3-white w3-padding-16 myLink" style="text-align: center;">
+      <form action="http://localhost:5000/display_result" method = "post" enctype="multipart/form-data">
+      <div style="overflow-x: auto;overflow-y: auto; height: 410px;">
+        <table>
+
+          <tr>
+            {% for c in cols %}
+            <th>{{c}}</th>
+            {% endfor %}
+          </tr>
+
+          {% for row in result %}
+            <tr>
+            {% for key in row %}
+                <td>{{row[key]}}</td>
+            {% endfor %}
+            </tr>
+          {% endfor %}  
+
+        </table>
+      </div>
+
+      <br>      
+
+      <div class="container"> 
+        <a onclick="dload_json()" class="button" style="vertical-align:middle" name="action" value="json"><span>Download as JSON</span></a>
+        <button class="button" style="vertical-align:middle" name="action" value="home" ><span>Go to Home</span></button>
+        <a onclick="dload_csv()" class="button" style="vertical-align:middle" name="action" value="csv"><span>Download as CSV</span></a>
+
+      </div>
+    </form>
+    </div>
+
+
+
+
+  </div>
+
+
+
+</header>
+
+
+<script>
+
+// function go_to_home(){
+//   window.location.href = "index.html";
+// }
+
+
+
+function openLink(evt, linkName) {
+  var i, x, tablinks;
+  x = document.getElementsByClassName("myLink");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < x.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" w3-green", "");
+  }
+  document.getElementById(linkName).style.display = "block";
+  evt.currentTarget.className += " w3-green";
+}
+
+// Click on the first tablink on load
+document.getElementsByClassName("tablink")[0].click();
+
+/*****************************************************************************/
+
+
+function dload_json(){
+
+  var data = '{{result}}';
+  var formatted_data = data.replaceAll("&#39;", "'");
+
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(formatted_data));
+  element.setAttribute('download', 'data.json');
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+  document.body.removeChild(element);
+
+}
+
+function dload_csv(){
+  // var server_data = '{{result}}';
+  var data = '{{result}}';
+  var formatted_data = data.replaceAll("&#39;", "'");
+
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(formatted_data));
+  element.setAttribute('download', 'data.csv');
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+  document.body.removeChild(element);
+
+
+
+}
+
+</script>
+
+</body>
+</html>
