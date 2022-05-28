@@ -1,6 +1,5 @@
-# Group4 Team5
-## End-user search queries on datasets (NoSQL)
-### Team Members :
+# End-user search queries on datasets (NoSQL)
+## Team Members :
 1. Somya Lalwani (2020201092)
 2. Ayush Khasgiwala (2020201088)
 3. Naman Jain (2020201080)
