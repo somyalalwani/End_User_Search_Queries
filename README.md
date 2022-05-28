@@ -2,16 +2,16 @@
 ## End-user search queries on datasets (NoSQL)
 ### Team Members :
 1. Somya Lalwani (2020201092)
-2. Naman Jain (2020201080)
-3. Ayush Khasgiwala (2020201088)
- 
-### File Access Links
-All files have been uploaded on gitlab : `http://10.4.20.64/Anurag_Muthyala/group4-team5/-/tree/main`
-The deployed project can be accessed using : ``
+2. Ayush Khasgiwala (2020201088)
+3. Naman Jain (2020201080)
 
+### Upload requirements
 The upload requirements for input database for project is :
 - `<database_name>.zip` file
 - zip file containing `<tablename>.json` files and corresponding metafiles `<tablename>_meta.txt`
+
+### How to run?
+`python3 app.py`
 
 ### Overview
 - Quierra is a fast and simple Browser tool to query our NoSQL data by uploading your JSON file on our website.
